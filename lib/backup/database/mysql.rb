@@ -198,7 +198,7 @@ module Backup
 
       # Builds the mydumper command for parallel dumping to a temporary directory
       def mydumper
-        "#{utility(:mydumper)} #{credential_options} #{connectivity_options} #{user_options} --outputdir='#{temp_dir}'"
+        "#{utility(:mydumper)} #{credential_options} #{connectivity_options} #{user_options} -B #{name_option} -o '#{temp_dir}'"
       end
     end
   end
