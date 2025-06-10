@@ -5,7 +5,7 @@ module Backup
     UTILITIES_NAMES = %w[
       tar cat split sudo chown hostname
       gzip bzip2
-      mongo mongodump mysqldump innobackupex
+      mongo mongodump mysqldump mydumper innobackupex
       pg_dump pg_dumpall redis-cli riak-admin
       gpg openssl
       rsync ssh

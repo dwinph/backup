@@ -30,6 +30,7 @@ describe Backup::Utilities do
         mongo        "/path/to/mongo"
         mongodump    "/path/to/mongodump"
         mysqldump    "/path/to/mysqldump"
+        mydumper     "/path/to/mydumper"
         pg_dump      "/path/to/pg_dump"
         pg_dumpall   "/path/to/pg_dumpall"
         redis_cli    "/path/to/redis-cli"

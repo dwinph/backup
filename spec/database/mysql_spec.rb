@@ -229,6 +229,87 @@ module Backup
       end # describe '#perform!'
     end # context 'using alternative engine (innobackupex)'
 
+    context "using alternative engine (mydumper)" do
+      before do
+        db.backup_engine = :mydumper
+      end
+
+      describe "#perform!" do
+        let(:pipeline) { double }
+        let(:compressor) { double }
+
+        before do
+          allow(db).to receive(:mydumper).and_return("mydumper_command")
+          allow(db).to receive(:dump_path).and_return("/tmp/trigger/databases")
+
+          expect(db).to receive(:log!).ordered.with(:started)
+          expect(db).to receive(:prepare!).ordered
+        end
+
+        context "without a compressor" do
+          it "packages the dump without compression" do
+            expect(Pipeline).to receive(:new).ordered.and_return(pipeline)
+
+            expect(pipeline).to receive(:<<).ordered.with("mydumper_command")
+
+            expect(pipeline).to receive(:<<).ordered.with(
+              "cat > '/tmp/trigger/databases/MySQL.tar'"
+            )
+
+            expect(pipeline).to receive(:run).ordered
+            expect(pipeline).to receive(:success?).ordered.and_return(true)
+
+            expect(db).to receive(:log!).ordered.with(:finished)
+
+            db.perform!
+          end
+        end # context 'without a compressor'
+
+        context "with a compressor" do
+          before do
+            allow(model).to receive(:compressor).and_return(compressor)
+            allow(compressor).to receive(:compress_with).and_yield("cmp_cmd", ".cmp_ext")
+          end
+
+          it "packages the dump with compression" do
+            expect(Pipeline).to receive(:new).ordered.and_return(pipeline)
+
+            expect(pipeline).to receive(:<<).ordered.with("mydumper_command")
+
+            expect(pipeline).to receive(:<<).ordered.with("cmp_cmd")
+
+            expect(pipeline).to receive(:<<).ordered.with(
+              "cat > '/tmp/trigger/databases/MySQL.tar.cmp_ext'"
+            )
+
+            expect(pipeline).to receive(:run).ordered
+            expect(pipeline).to receive(:success?).ordered.and_return(true)
+
+            expect(db).to receive(:log!).ordered.with(:finished)
+
+            db.perform!
+          end
+        end # context 'with a compressor'
+
+        context "when the pipeline fails" do
+          before do
+            allow_any_instance_of(Pipeline).to receive(:success?).and_return(false)
+            allow_any_instance_of(Pipeline).to receive(:error_messages).and_return("error messages")
+          end
+
+          it "raises an error" do
+            expect do
+              db.perform!
+            end.to raise_error(Database::MySQL::Error) { |err|
+              expect(err.message).to eq(
+                "Database::MySQL::Error: Dump Failed!\n  error messages"
+              )
+            }
+          end
+        end # context 'when the pipeline fails'
+      end # describe '#perform!'
+    end # context 'using alternative engine (mydumper)'
+
     describe "#mysqldump" do
       let(:option_methods) do
         %w[

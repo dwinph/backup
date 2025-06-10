@@ -78,7 +78,16 @@ module Backup
         pipeline = Pipeline.new
         dump_ext = sql_backup? ? "sql" : "tar"
 
-        pipeline << sudo_option(sql_backup? ? mysqldump : innobackupex)
+        # Determine which backup engine to use
+        engine = backup_engine.to_sym
+        cmd = if engine == :mysqldump
+                mysqldump
+              elsif engine == :mydumper
+                mydumper
+              else
+                innobackupex
+              end
+        pipeline << sudo_option(cmd)
 
         if model.compressor
           model.compressor.compress_with do |command, ext|
@@ -185,6 +194,11 @@ module Backup
 
       def temp_dir
         File.join(dump_path, "#{dump_filename}.bkpdir")
+      end
+
+      # Builds the mydumper command for parallel dumping to a temporary directory
+      def mydumper
+        "#{utility(:mydumper)} #{credential_options} #{connectivity_options} #{user_options} --outputdir='#{temp_dir}'"
       end
     end
   end
