@@ -61,7 +61,7 @@ module Backup
           body: URI.encode_www_form(data)
         }
         options[:expects] = 200 # raise error if unsuccessful
-        Excon.post(uri, options)
+        Excon.post(uri, **options)
       end
     end
   end

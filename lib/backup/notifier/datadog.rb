@@ -87,7 +87,7 @@ module Backup
       # Dogapi::Client will raise an error if unsuccessful.
       def send_event(msg, hash)
         client = Dogapi::Client.new(@api_key)
-        event = Dogapi::Event.new(msg, hash)
+        event = Dogapi::Event.new(msg, **hash)
         client.emit_event(event)
       end
 

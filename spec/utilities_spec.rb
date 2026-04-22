@@ -254,9 +254,9 @@ describe Backup::Utilities::Helpers do
           "Running system utility 'cmd_name'..."
         )
 
-        expect(Open4).to receive(:popen4).with(command).and_yield(
-          nil, stdin_io, stdout_io, stderr_io
-        ).and_return(process_status)
+        expect(Open3).to receive(:popen3).with(command).and_yield(
+          stdin_io, stdout_io, stderr_io, double(Thread, value: process_status)
+        )
       end
 
       context "and generates no messages" do
@@ -319,9 +319,9 @@ describe Backup::Utilities::Helpers do
           "Running system utility 'cmd_name'..."
         )
 
-        expect(Open4).to receive(:popen4).with(command).and_yield(
-          nil, stdin_io, stdout_io, stderr_io
-        ).and_return(process_status)
+        expect(Open3).to receive(:popen3).with(command).and_yield(
+          stdin_io, stdout_io, stderr_io, double(Thread, value: process_status)
+        )
 
         allow(process_status).to receive(:exitstatus).and_return(1)
       end
@@ -393,7 +393,7 @@ describe Backup::Utilities::Helpers do
           "Running system utility 'cmd_name'..."
         )
 
-        expect(Open4).to receive(:popen4).and_raise("exec call failed")
+        expect(Open3).to receive(:popen3).and_raise("exec call failed")
       end
 
       it "should raise an error wrapping the system error raised" do

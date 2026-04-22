@@ -73,7 +73,7 @@ module Backup
           body: URI.encode_www_form(payload: JSON.dump(data))
         }
         options[:expects] = 200 # raise error if unsuccessful
-        Excon.post(uri, options)
+        Excon.post(uri, **options)
       end
 
       def attachment(status)

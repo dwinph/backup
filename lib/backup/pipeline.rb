@@ -49,7 +49,7 @@ module Backup
     # Use `#success?` to determine if all commands in the pipeline succeeded.
     # If `#success?` returns `false`, use `#error_messages` to get an error report.
     def run
-      Open4.popen4(pipeline) do |_pid, _stdin, stdout, stderr|
+      Open3.popen3(pipeline) do |_stdin, stdout, stderr, _wait_thr|
         pipestatus = stdout.read.delete("\n").split(":").sort
         pipestatus.each do |status|
           index, exitstatus = status.split("|").map(&:to_i)

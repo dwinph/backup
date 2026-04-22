@@ -54,7 +54,7 @@ module Backup
         options[:user] = api_token
         options[:password] = "x" # Basic Auth
         options[:expects] = 201 # raise error if unsuccessful
-        Excon.post(uri, options)
+        Excon.post(uri, **options)
       end
     end
   end

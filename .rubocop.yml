@@ -1,22 +1,14 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 2.0
-  Include:
-    - "Gemfile"
-    - "Rakefile"
-    - "backup.gemspec"
+  TargetRubyVersion: 3.1
+  NewCops: disable
+  SuggestExtensions: false
   Exclude:
     - "tmp/**/*"
     - "vagrant/**/*"
-    # Necessary on travis CI
     - "vendor/**/*"
   DisplayCopNames: true
-  UseCache: true
-  CacheRootDirectory: ./tmp
-
-# Metrics/LineLength:
-#   Max: 80
 
 Style/Documentation:
   Enabled: false
@@ -27,22 +19,22 @@ Style/StringLiterals:
 Style/StringLiteralsInInterpolation:
   EnforcedStyle: double_quotes
 
-Style/AlignParameters:
+Layout/ArgumentAlignment:
   EnforcedStyle: with_fixed_indentation
 
-Style/MultilineMethodCallIndentation:
+Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented
 
-Style/MultilineOperationIndentation:
+Layout/MultilineOperationIndentation:
   EnforcedStyle: indented
 
 Style/HashSyntax:
   EnforcedStyle: ruby19
 
-Style/AlignHash:
+Layout/HashAlignment:
   EnforcedLastArgumentHashStyle: ignore_implicit
 
-Style/IndentArray:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
 Style/FormatString:

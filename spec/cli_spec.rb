@@ -541,11 +541,11 @@ describe "Backup::CLI" do
     it "should include the correct option values" do
       options = <<-EOS.lines.to_a.map(&:strip).map { |l| l.partition(" ") }
         databases (mongodb, mysql, openldap, postgresql, redis, riak)
-        storages (cloud_files, dropbox, ftp, local, qiniu, rsync, s3, scp, sftp)
-        syncers (cloud_files, rsync_local, rsync_pull, rsync_push, s3)
+        storages (ftp, local, qiniu, rsync, s3, scp, sftp)
+        syncers (rsync_local, rsync_pull, rsync_push, s3)
         encryptor (gpg, openssl)
         compressor (bzip2, custom, gzip)
-        notifiers (campfire, command, datadog, flowdock, hipchat, http_post, mail, nagios, pagerduty, prowl, pushover, ses, slack, twitter)
+        notifiers (campfire, command, datadog, http_post, mail, nagios, pagerduty, prowl, pushover, ses, slack)
       EOS
 
       out, err = capture_io do

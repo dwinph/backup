@@ -27,7 +27,7 @@ module Backup
 
       def connection
         Net::SSH.start(
-          ip, username, { password: password, port: port }.merge(ssh_options)
+          ip, username, **{ password: password, port: port }.merge(ssh_options)
         ) { |ssh| yield ssh }
       end
 

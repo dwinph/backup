@@ -1,10 +1,10 @@
 inherit_from: ../.rubocop.yml
 
-# Metrics/LineLength:
+# Layout/LineLength:
 #   Max: 100
 
 Lint/AmbiguousBlockAssociation:
   Enabled: false
 
-Style/IndentHeredoc:
+Layout/HeredocIndentation:
   Enabled: false

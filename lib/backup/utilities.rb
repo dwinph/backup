@@ -179,10 +179,12 @@ module Backup
         begin
           out = ""
           err = ""
-          ps = Open4.popen4(command) do |_pid, stdin, stdout, stderr|
+          ps = nil
+          Open3.popen3(command) do |stdin, stdout, stderr, wait_thr|
             stdin.close
             out = stdout.read.strip
             err = stderr.read.strip
+            ps = wait_thr.value
           end
         rescue Exception => e
           raise Error.wrap(e, "Failed to execute '#{name}'")

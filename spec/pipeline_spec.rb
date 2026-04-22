@@ -51,7 +51,7 @@ describe "Backup::Pipeline" do
 
     context "when pipeline command is successfully executed" do
       before do
-        expect(Open4).to receive(:popen4).with("foo").and_yield(nil, nil, stdout, stderr)
+        expect(Open3).to receive(:popen3).with("foo").and_yield(double(close: nil), stdout, stderr, double(value: nil))
       end
 
       context "when all commands within the pipeline are successful" do
@@ -164,7 +164,7 @@ describe "Backup::Pipeline" do
 
     context "when pipeline command fails to execute" do
       before do
-        expect(Open4).to receive(:popen4).with("foo").and_raise("exec failed")
+        expect(Open3).to receive(:popen3).with("foo").and_raise("exec failed")
       end
 
       it "should raise an error" do

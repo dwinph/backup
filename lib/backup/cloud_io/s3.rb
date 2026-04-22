@@ -1,5 +1,5 @@
 require "backup/cloud_io/base"
-require "fog"
+require "fog/aws"
 require "digest/md5"
 require "base64"
 require "stringio"
@@ -73,7 +73,7 @@ module Backup
         while resp.nil? || resp.body["IsTruncated"]
           opts["marker"] = objects.last.key unless objects.empty?
           with_retries("GET '#{bucket}/#{prefix}/*'") do
-            resp = connection.get_bucket(bucket, opts)
+            resp = connection.get_bucket(bucket, **opts)
           end
           resp.body["Contents"].each do |obj_data|
             objects << Object.new(self, obj_data)
@@ -105,7 +105,7 @@ module Backup
         until keys.empty?
           keys_partial = keys.slice!(0, 1000)
           with_retries("DELETE Multiple Objects") do
-            resp = connection.delete_multiple_objects(bucket, keys_partial, opts.dup)
+            resp = connection.delete_multiple_objects(bucket, keys_partial, **opts.dup)
             unless resp.body["DeleteResult"].empty?
               errors = resp.body["DeleteResult"].map do |result|
                 error = result["Error"]
@@ -131,7 +131,7 @@ module Backup
               opts[:aws_secret_access_key] = secret_access_key
             end
             opts.merge!(fog_options || {})
-            conn = Fog::Storage.new(opts)
+            conn = Fog::Storage.new(**opts)
             conn.sync_clock
             conn
           end
@@ -142,7 +142,7 @@ module Backup
         options = headers.merge("Content-MD5" => md5)
         with_retries("PUT '#{bucket}/#{dest}'") do
           File.open(src, "r") do |file|
-            connection.put_object(bucket, dest, file, options)
+            connection.put_object(bucket, dest, file, **options)
           end
         end
       end
@@ -152,7 +152,7 @@ module Backup
 
         resp = nil
         with_retries("POST '#{bucket}/#{dest}' (Initiate)") do
-          resp = connection.initiate_multipart_upload(bucket, dest, headers)
+          resp = connection.initiate_multipart_upload(bucket, dest, **headers)
         end
         resp.body["UploadId"]
       end

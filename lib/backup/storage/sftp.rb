@@ -26,7 +26,7 @@ module Backup
 
       def connection
         Net::SFTP.start(
-          ip, username, { password: password, port: port }.merge(ssh_options)
+          ip, username, **{ password: password, port: port }.merge(ssh_options)
         ) { |sftp| yield sftp }
       end
 

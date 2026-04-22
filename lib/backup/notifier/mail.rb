@@ -205,12 +205,12 @@ module Backup
           when "sendmail"
             opts = {}
             opts[:location] = utility(:sendmail)
-            opts[:arguments] = @sendmail_args if @sendmail_args
+            opts[:arguments] = Array(@sendmail_args).flat_map(&:split) if @sendmail_args
             opts
           when "exim"
             opts = {}
             opts[:location] = utility(:exim)
-            opts[:arguments] = @exim_args if @exim_args
+            opts[:arguments] = Array(@exim_args).flat_map(&:split) if @exim_args
             opts
           when "file"
             @mail_folder ||= File.join(Config.root_path, "emails")

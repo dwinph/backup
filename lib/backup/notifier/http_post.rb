@@ -107,7 +107,7 @@ module Backup
         opts[:ssl_verify_peer] = ssl_verify_peer unless ssl_verify_peer.nil?
         opts[:ssl_ca_file] = ssl_ca_file if ssl_ca_file
 
-        Excon.post(uri, opts)
+        Excon.post(uri, **opts)
       end
     end
   end

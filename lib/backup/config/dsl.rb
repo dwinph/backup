@@ -27,7 +27,7 @@ module Backup
             [ # Databases
               ["MySQL", "PostgreSQL", "MongoDB", "Redis", "Riak", "OpenLDAP", "SQLite"],
               # Storages
-              ["S3", "CloudFiles", "Dropbox", "FTP",
+              ["S3", "FTP",
                "SFTP", "SCP", "RSync", "Local", "Qiniu"],
               # Compressors
               ["Gzip", "Bzip2", "Custom"],
@@ -35,13 +35,13 @@ module Backup
               ["OpenSSL", "GPG"],
               # Syncers
               [
-                { "Cloud" => ["CloudFiles", "S3"] },
+                { "Cloud" => ["S3"] },
                 { "RSync" => ["Push", "Pull", "Local"] }
               ],
               # Notifiers
-              ["Mail", "Twitter", "Campfire", "Prowl",
-               "Hipchat", "PagerDuty", "Pushover", "HttpPost", "Nagios",
-               "Slack", "FlowDock", "Zabbix", "Ses", "DataDog", "Command"]
+              ["Mail", "Campfire", "Prowl",
+               "PagerDuty", "Pushover", "HttpPost", "Nagios",
+               "Slack", "Zabbix", "Ses", "DataDog", "Command"]
             ]
           )
         end

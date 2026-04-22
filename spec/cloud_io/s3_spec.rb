@@ -553,7 +553,7 @@ module Backup
         expect(cloud_io).to receive(:with_retries)
           .with("POST 'my_bucket/dest/file' (Initiate)").and_yield
         expect(connection).to receive(:initiate_multipart_upload)
-          .with("my_bucket", "dest/file", {}).and_return(response)
+          .with("my_bucket", "dest/file").and_return(response)
 
         expect(cloud_io.send(:initiate_multipart, "dest/file")).to be 1234
       end
